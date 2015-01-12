@@ -20,7 +20,7 @@ public class HelloWorld {
      */
     public static void main(String[] args) {
         
-        // Declare and initialize variables
+        // Instance Variables
         String message = " Hello world! "
                 + "\n Here are some of Patrick Glenning's favorite things:\n "
                 + "\n   1. Video Game "
@@ -30,7 +30,7 @@ public class HelloWorld {
                 + "\n   3. Song"
                 + "\n      Chip - The Real McKenzies";
         
-        //Print message to the screen
+        //Main Method
         System.out.println(message);
     }
     
