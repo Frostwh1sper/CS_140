@@ -6,7 +6,7 @@
  *      assignment: Lab #2
  *      date last modified: 4 Feb 2015
  * 
- *      purpose: Accepts user inputs, then displays a story using those inputs.
+ *      purpose: Accepts user inputs, then displays a story using those inputs, formatted in different ways
  * 
  */
 package stringmethods;
