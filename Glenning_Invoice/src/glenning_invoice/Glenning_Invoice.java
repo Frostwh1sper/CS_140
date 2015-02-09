@@ -11,25 +11,28 @@
  */
 package glenning_invoice;
 
-import java.text.DecimalFormat;
+
 import java.util.Scanner;
+import java.math.BigDecimal;
 
 public class Glenning_Invoice {
+    
+    public static final BigDecimal gas_87 = new BigDecimal("2.47");
+    public static final BigDecimal gas_89 = new BigDecimal("2.58");
+    public static final BigDecimal gas_91 = new BigDecimal("2.61");
+    public static final BigDecimal countyTax = new BigDecimal("0.07");
+    public static final BigDecimal cityTax = new BigDecimal("0.0375");
+    public static final BigDecimal memberDiscount = new BigDecimal("0.1");
 
     public static void main(String[] args) {
-        // Initiate Scanner and DecimalFormat
+        
+        // Initiate Scanner
         Scanner userInput = new Scanner(System.in);
-        DecimalFormat df = new DecimalFormat("#.##");
         
         //Declare and initialize variables
-        float gas_87 = 2.47f;
-        float gas_89 = 2.58f;
-        float gas_91 = 2.61f;
-        float countyTax = 0.07f;
-        float cityTax = 0.0375f;
-        float price=0;
-        float subtotal;
-        float total;
+        BigDecimal price = new BigDecimal("0");
+        BigDecimal subtotal;
+        BigDecimal total;
         
         //User inputs
         System.out.print("Are you a member? (yes or no) ");
@@ -37,7 +40,7 @@ public class Glenning_Invoice {
         System.out.print("What quality gas (87, 89, 91): ");
         int quality = userInput.nextInt();
         System.out.print("Gallons sold: ");
-        int quantity = userInput.nextInt();
+        BigDecimal quantity = new BigDecimal(userInput.nextInt());
         
         //calculations
         if(quality == 87){
@@ -50,22 +53,25 @@ public class Glenning_Invoice {
             price = gas_91;
         }
         if(membership.equals("yes")){
-            price -= 0.1f;
+            price = price.subtract(memberDiscount);
         }
-        subtotal = price * quantity;
-        float countyTaxAmt = (subtotal * countyTax);
-        float cityTaxAmt = (subtotal * cityTax);
-        total = (subtotal + countyTaxAmt + cityTaxAmt);
+        subtotal = price.multiply(quantity);
+        BigDecimal countyTaxAmt = subtotal.multiply(countyTax);
+        BigDecimal cityTaxAmt = subtotal.multiply(cityTax);
+        total = subtotal.setScale(2, BigDecimal.ROUND_HALF_UP);
+        total = total.add(countyTaxAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        total = total.add(cityTaxAmt.setScale(2, BigDecimal.ROUND_HALF_UP));
+        
         
         //Print invoice
         System.out.print(String.format("\n\n%27s\n", "INVOICE FOR GASOLINE"));
         System.out.print(String.format("%20s: %s\n", "Member status", membership));
-        System.out.print(String.format("%20s: %s @ $%s\n\n", "Gasoline Sold/Price", quantity, df.format(price)));
-        System.out.print(String.format("%20s: $%7s\n", "Subtotal", df.format(subtotal)));
-        System.out.print(String.format("%20s: $%7s\n", "County Tax", df.format(countyTaxAmt)));
-        System.out.print(String.format("%20s: $%7s\n", "City Tax", df.format(cityTaxAmt)));
+        System.out.print(String.format("%20s: %s @ $%s\n\n", "Gasoline Sold/Price", quantity, price.setScale(2, BigDecimal.ROUND_HALF_UP)));
+        System.out.print(String.format("%20s: $%7s\n", "Subtotal", subtotal.setScale(2, BigDecimal.ROUND_HALF_UP)));
+        System.out.print(String.format("%20s: $%7s\n", "County Tax", countyTaxAmt.setScale(2, BigDecimal.ROUND_HALF_UP)));
+        System.out.print(String.format("%20s: $%7s\n", "City Tax", cityTaxAmt.setScale(2, BigDecimal.ROUND_HALF_UP)));
         System.out.print(String.format("%20s--------------\n", " "));
-        System.out.print(String.format("%20s: $%7s\n", "Total", df.format(total)));
+        System.out.print(String.format("%20s: $%7s\n", "Total", total));
         
     }
     
